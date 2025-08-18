@@ -7,11 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+import { Trash2 } from "lucide-react";
+
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import Logo from "./assets/Logoredonda.png";
 import LogoShield from "./assets/LogoredondaShield.png";
 interface CustoType {
+  id: number;
   titulo: string | undefined;
   valor: number | null;
 }
@@ -21,12 +24,7 @@ export function App() {
 
   const [faturamentoCartao = 0, setFaturamentoCartao] = useState<number>();
 
-  const [custos, setCustos] = useState<CustoType[]>([
-    {
-      titulo: "",
-      valor: null,
-    },
-  ]);
+  const [custos, setCustos] = useState<CustoType[]>([]);
 
   const [titulo, setTitulo] = useState<string>();
   const [valor = 0, setValor] = useState<number | undefined>(undefined);
@@ -41,12 +39,21 @@ export function App() {
     useState<number>();
 
   function addCusto(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-    console.log(event);
     event.preventDefault();
-    setCustos([...custos, { titulo: titulo, valor: Number(valor) }]);
+    let id: number = 0;
+    custos.forEach((e) => (id = e.id + 1));
+    setCustos([...custos, { id: id, titulo: titulo, valor: Number(valor) }]);
 
     setTitulo("");
     setValor(undefined);
+  }
+  console.log(custos);
+  function removedCusto(i: number) {
+    console.log(i);
+
+    const result = custos.filter((id) => id.id !== i);
+
+    setCustos(result);
   }
 
   function percentFormmat(t: number) {
@@ -451,6 +458,7 @@ export function App() {
         break;
     }
   }, [faturamentoWithShield, segmento]);
+
   return (
     <>
       <div className="">
@@ -570,13 +578,21 @@ export function App() {
                     custos.map((e, i) => {
                       return (
                         <div key={i}>
-                          <div className="flex items-center gap-6 mt-2 ">
+                          <div className="flex items-center gap-6 mt-2 justify-between">
                             <p className="flex ">
                               {e.titulo && `Devo pagar para: ${e.titulo}`}
                             </p>
                             <span className="  ">
                               {e.valor && formattedNumber(e.valor)}
                             </span>
+
+                            <Button
+                              className="w-0 h-7 bg-red-600"
+                              type="button"
+                              onClick={() => removedCusto(e.id)}
+                            >
+                              <Trash2 />
+                            </Button>
                           </div>
                         </div>
                       );
@@ -588,12 +604,12 @@ export function App() {
                       <Input
                         className="max-w-20 bg-blue-950 text-amber-50 placeholder:text-amber-50 max-sm:text-[0.85rem]"
                         placeholder="Digita Aqui"
-                        type=""
                         value={taxaPos}
-                        onBlur={(e) => (e.target.value = taxaPos + "%")}
+                        type="number"
+                        // onBlur={(e) => (e.target.value = taxaPos + "%")}
                         onChange={(e) => {
                           const numericValue = Number(
-                            e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")
+                            e.target.value.replace(/[^0-9.]/g, "")
                           );
                           setTaxaPos(numericValue);
                         }}
@@ -662,12 +678,13 @@ export function App() {
                       <Input
                         placeholder="Digita Aqui"
                         className="max-w-20 h-6"
+                        type="number"
                         value={taxaPosShield}
-                        onBlur={(e) => (e.target.value = taxaPosShield + "%")}
+                        // onBlur={(e) => (e.target.value = taxaPosShield + "%")}
                         onChange={(e) => {
                           console.log(e);
                           const numericValue = Number(
-                            e.target.value.replace(/[^a-zA-Z0-9\s]/g, "")
+                            e.target.value.replace(/[^0-9.]/g, "")
                           );
                           setTaxaPosShield(numericValue);
                         }}
