@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "./components/ui/card";
 import { Trash2 } from "lucide-react";
-
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import Logo from "./assets/Logoredonda.png";
@@ -47,12 +46,8 @@ export function App() {
     setTitulo("");
     setValor(undefined);
   }
-  console.log(custos);
   function removedCusto(i: number) {
-    console.log(i);
-
     const result = custos.filter((id) => id.id !== i);
-
     setCustos(result);
   }
 
@@ -458,15 +453,14 @@ export function App() {
         break;
     }
   }, [faturamentoWithShield, segmento]);
-
   return (
     <>
       <div className="">
-        <div className="flex border-0 bg-slate-900 pl-20   max-sm:justify-center max-sm:pl-0">
+        <div className="flex border-0 bg-slate-900 pl-20 max-lg:w-full max-sm:justify-center max-sm:pl-0">
           <img className="w-50 max-sm:w-30  " src={LogoShield}></img>
         </div>
-        <div className="w-full mt-[-6rem] max-sm:mt-0 bg-slate-900 min-h-screen p-5 grid place-content-center max-sm:max-w-full ">
-          <h1 className="text-amber-50 text-center scroll-m-20  pb-2 text-3xl max-sm:text-2xl font-semibold tracking-tight  ">
+        <div className="w-full mt-[-6rem] max-sm:mt-0  bg-slate-900 min-h-screen p-5 grid place-content-center max-sm:max-w-full ">
+          <h1 className="text-amber-50 text-center scroll-m-20  pb-2 text-3xl max-sm:text-2xl max-lg:mt-20 font-semibold tracking-tight  ">
             INTELIGÊNCIA TRIBUTARIA SHIELD
           </h1>
           <div className=" xl:grid xl:grid-cols-2 sm:grid-cols-1 md:grid-cols-1  ">
@@ -490,9 +484,9 @@ export function App() {
               </div>
             </div>
           </div>
-          <div className=" max-sm:mt-6  gap-10 grid sm:grid-cols-2   ">
+          <div className=" max-sm:mt-6  gap-10 grid sm:grid-cols-2    ">
             <div className=" w-full ">
-              <Card className=" grid place-content-between gap-10 max-sm:text-[0.85rem]  max-md:text-[0.85rem]  ">
+              <Card className=" grid place-content-between gap-10 max-sm:text-[0.85rem]  max-lg:text-[0.85rem]  ">
                 <CardHeader>
                   {/* <CardTitle>Cenário 1: vendas em cartão!!</CardTitle> */}
                   <CardAction>SEM EFICIÊNCIA TRIBUTÁRIA</CardAction>
@@ -585,7 +579,6 @@ export function App() {
                             <span className="  ">
                               {e.valor && formattedNumber(e.valor)}
                             </span>
-
                             <Button
                               className="w-0 h-7 bg-red-600"
                               type="button"
@@ -603,10 +596,10 @@ export function App() {
                       <p>Taxas da maquininha em cartão:</p>
                       <Input
                         className="max-w-20 bg-blue-950 text-amber-50 placeholder:text-amber-50 max-sm:text-[0.85rem]"
-                        placeholder="Digita Aqui"
+                        placeholder="0"
                         value={taxaPos}
                         type="number"
-                        // onBlur={(e) => (e.target.value = taxaPos + "%")}
+                        // onBlur={(e) => e.target.value.replace(/^0+/, "")}
                         onChange={(e) => {
                           const numericValue = Number(
                             e.target.value.replace(/[^0-9.]/g, "")
@@ -633,10 +626,10 @@ export function App() {
               </Card>
             </div>
             <div className="w-full">
-              <Card className=" grid place-content-between gap-10  max-sm:text-[0.85rem]  ">
+              <Card className=" grid place-content-between gap-10  max-sm:text-[0.85rem] max-lg:text-[0.85rem] max-lg:overflow-hidden ">
                 <CardHeader>
                   {/* <CardTitle>Cenário 1: vendas em cartão!!</CardTitle> */}
-                  <CardAction className="w-70 max-sm:w-55 h-10 flex justify-center items-center rounded-2xl bg-blue-950 text-amber-50">
+                  <CardAction className="w-70 max-sm:w-55 h-10 flex justify-center items-center rounded-2xl bg-blue-950 text-amber-50 max-lg:w-50">
                     COM EFICIÊNCIA TRIBUTÁRIA
                   </CardAction>
                 </CardHeader>
@@ -654,8 +647,11 @@ export function App() {
                     <span>{formattedNumber(faturamentoCartao)}</span>
                   </div>
 
-                  <div className="flex  gap-10 mt-10 ">
-                    <p> Insira abaixo os seus custos (Demais recebedores)</p>
+                  <div className="flex  gap-10 mt-10  max-lg:w-100% max-lg:gap-5">
+                    <p className="max-lg:w-58">
+                      {" "}
+                      Insira abaixo os seus custos (Demais recebedores)
+                    </p>
                     <span>
                       {custosTotais >= 0 ? formattedNumber(custosTotais) : 0}{" "}
                     </span>
@@ -664,16 +660,18 @@ export function App() {
                     custos.map((e, i) => {
                       return (
                         <div key={i}>
-                          <div className="flex place-content-between gap-4">
-                            <p>{e.titulo}</p>
-                            <span>{e.valor && formattedNumber(e.valor)}</span>
+                          <div className="flex place-content-between gap-4 max-lg:mt-3 max-lg:place-content-start ">
+                            <p className="">{e.titulo}</p>
+                            <span className="">
+                              {e.valor && formattedNumber(e.valor)}
+                            </span>
                           </div>
                         </div>
                       );
                     })}
 
                   <div>
-                    <div className="flex place-content-between gap-4 mt-10 ">
+                    <div className="flex place-content-between gap-4 mt-10 max-lg:place-content-start  ">
                       <p>Taxas da maquininha em cartão:</p>
                       <Input
                         placeholder="Digita Aqui"
@@ -703,9 +701,9 @@ export function App() {
                   </div>
                 </CardContent>
                 <CardFooter className="w-full grid place-content-center place-items-center">
-                  {lucroComEficiencia > 100 ? (
+                  {lucroComEficiencia >= 100 ? (
                     <div className="w-full grid place-content-center border-2 rounded-2xl max-sm:w-10  ">
-                      <Card className="w-100 grid gap-5 bg-blue-950 text-amber-50 max-sm:w-80 ">
+                      <Card className="w-100 grid gap-5 bg-blue-950 text-amber-50 max-sm:w-80 max-lg:w-70 ">
                         <CardHeader>
                           <CardTitle>ECONOMIA COM A SHIELD:</CardTitle>
                         </CardHeader>
